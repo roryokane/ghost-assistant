@@ -260,11 +260,11 @@ else
 			if num_of_players > 2				
 				if analysis.good_words_kind_to_previous_player.length > 0
 					print_truncated_wordlist_with_modified_description( \
-					 good_words_kind_to_previous_player, "NUM other suitable WORDS don’t get the previous player out")
+					 analysis.good_words_kind_to_previous_player, "NUM other suitable WORDS don’t get the previous player out")
 				end
 				if analysis.good_words_that_get_previous_player.length > 0
 					print_truncated_wordlist_with_modified_description( \
-					 good_words_that_get_previous_player, "NUM other suitable WORDS get the previous player out")
+					 analysis.good_words_that_get_previous_player, "NUM other suitable WORDS get the previous player out")
 				end
 			else
 				print_truncated_wordlist_with_modified_description( \
