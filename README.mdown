@@ -1,0 +1,1 @@
+A program that can perfectly play the word game [GHOST](http://en.wikipedia.org/wiki/Ghost_%28game%29).
