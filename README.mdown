@@ -30,5 +30,5 @@ Sample run:
     locustal
     locution
     locutories
-    Suggested letter to say: L, with score 1
+    Suggested letter to say: L (forming “lol”), with score 1
     A word starting with “lol”: loll
