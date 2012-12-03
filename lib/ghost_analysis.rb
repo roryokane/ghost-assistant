@@ -3,6 +3,9 @@
 require 'memoist'
 include Memoist
 
+MINIMUM_WORD_LENGTH = 3
+DEBUG = false
+
 class GhostAnalysis
 	def initialize(ghost_environment)
 		@env = ghost_environment

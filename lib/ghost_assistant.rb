@@ -2,9 +2,7 @@
 
 # environment setup section
 
-MINIMUM_WORD_LENGTH = 3
 NUM_OF_WORDS_TO_SHOW = 10
-DEBUG = false
 
 require_relative 'wordlist_loader'
 wordlist = load_wordlist()
