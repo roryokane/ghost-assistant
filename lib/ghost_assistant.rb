@@ -6,12 +6,8 @@ MINIMUM_WORD_LENGTH = 3
 NUM_OF_WORDS_TO_SHOW = 10
 DEBUG = false
 
-wordlist = Array.new
-File.open("lib/enable1.txt", 'r') do |wordlist_file|
-	wordlist_file.each_line do |line|
-		wordlist.push(line.strip)
-	end
-end
+require_relative 'wordlist_loader'
+wordlist = load_wordlist
 
 # TODO input validation and defaults
 puts "GHOST word game assistant"

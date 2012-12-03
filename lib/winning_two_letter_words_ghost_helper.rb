@@ -1,12 +1,8 @@
 # encoding: utf-8
 
-# load wordlist
-wordlist = Array.new
-File.open("lib/enable1.txt", 'r') do |wordlist_file|
-	wordlist_file.each_line do |line|
-		wordlist.push(line.strip)
-	end
-end
+require_relative 'wordlist_loader'
+
+wordlist = load_wordlist
 
 # calculate guaranteed-win n-letter words, assuming certain rules about word length
 # those rules are “n-letter and shorter words are safe” and
