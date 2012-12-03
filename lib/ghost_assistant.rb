@@ -139,7 +139,7 @@ class GhostAnalysis
 		elsif good_wordlist.first == @env.current_letters
 			:call
 		else
-			# return good_wordlist.choice[@env.current_letters.length, 1]
+			# return good_wordlist.sample[@env.current_letters.length, 1]
 			
 			possible_letters = good_wordlist.map { |word| word[@env.current_letters.length, 1] }.uniq
 			puts "possible letters for “#{@env.current_letters}”: #{possible_letters.join(" ")}" if DEBUG
@@ -154,8 +154,8 @@ class GhostAnalysis
 				best_score = possible_letter_scores.values.max
 				puts "best score for “#{@env.current_letters}”: #{best_score}" if DEBUG
 				best_letters = possible_letter_scores.reject { |letter, score| score != best_score }.keys
-				best_letters.choice
-				# TODO do I need to do something about choice using the same random seed each run?
+				best_letters.sample
+				# TODO do I need to do something about #choice using the same random seed each run? (Does #sample do that?)
 				# TODO make variant method that returns all best letters, instead of a random one,
 				# and lets the caller choose one
 			else
