@@ -12,7 +12,7 @@ NUM_OF_WORDS_TO_SHOW = 10
 DEBUG = false
 
 wordlist = Array.new
-File.open("enable1.txt", "r") do |wordlist_file|
+File.open("lib/enable1.txt", "r") do |wordlist_file|
 	wordlist_file.each_line do |line|
 		wordlist.push(line.strip)
 	end
