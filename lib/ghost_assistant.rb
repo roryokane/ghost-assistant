@@ -7,7 +7,7 @@ NUM_OF_WORDS_TO_SHOW = 10
 DEBUG = false
 
 require_relative 'wordlist_loader'
-wordlist = load_wordlist
+wordlist = load_wordlist()
 
 # TODO input validation and defaults
 puts "GHOST word game assistant"

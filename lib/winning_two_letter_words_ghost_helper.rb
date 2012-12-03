@@ -2,7 +2,7 @@
 
 require_relative 'wordlist_loader'
 
-wordlist = load_wordlist
+wordlist = load_wordlist()
 
 # calculate guaranteed-win n-letter words, assuming certain rules about word length
 # those rules are “n-letter and shorter words are safe” and
