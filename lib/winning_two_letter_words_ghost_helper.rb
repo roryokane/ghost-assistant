@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # load wordlist
 wordlist = Array.new
 File.open("enable1.txt", "r") do |wordlist_file|
