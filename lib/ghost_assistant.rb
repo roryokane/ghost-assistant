@@ -28,6 +28,7 @@ current_letters = gets.chomp.strip.downcase
 # The difference between the sets are words the program pretends not to know,
 # until someone else has used it in a recent game.
 
+
 # analysis section
 
 require_relative 'ghost_environment'
