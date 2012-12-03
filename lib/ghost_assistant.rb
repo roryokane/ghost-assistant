@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 require 'rubygems'
-require 'memoize'
-include Memoize
+require 'memoist'
+include Memoist
 
 
 # environment setup section
