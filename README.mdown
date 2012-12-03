@@ -2,7 +2,7 @@ A program that can perfectly play the word game [GHOST](http://en.wikipedia.org/
 
 Sample run:
 
-    $ ruby ghost_assistant.rb
+    $ bundle exec ruby lib/ghost_assistant.rb
     GHOST word game assistant
     How many people are playing? (default 2)
     2
