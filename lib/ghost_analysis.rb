@@ -107,7 +107,7 @@ class GhostAnalysis
 				best_letters = possible_letter_scores.reject { |letter, score| score != best_score }.keys
 				best_letters.sample
 				# TODO do I need to do something about #choice using the same random seed each run? (Does #sample do that?)
-				# TODO make variant method that returns all best letters, instead of a random one,
+				# TODO make variant method #best_responses that returns all best letters, instead of a random one,
 				# and lets the caller choose one
 			else
 				possible_letters.first
