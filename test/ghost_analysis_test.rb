@@ -6,7 +6,7 @@ require_relative '../lib/ghost_analysis'
 require_relative '../lib/ghost_environment'
 require_relative '../lib/wordlist_loader'
 
-class TestGhostAnalysis < MiniTest::Unit::TestCase
+class TestGhostAnalysis < MiniTest::Test
 	def setup
 		@wordlist = load_wordlist()
 	end
