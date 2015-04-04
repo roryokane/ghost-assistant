@@ -56,14 +56,14 @@ def print_truncated_wordlist_with_modified_description(wordlist, description)
 	puts wordlist_subset.join("\n")
 end
 
-num_possible_words = analysis.possible_wordlist.length
-# print "#{num_possible_words} "
-# if num_possible_words == 1
-# 	print "word starts"
-# else
-# 	print "words start"
-# end
-# puts " with “#{current_letters}”"
+#num_possible_words = analysis.possible_wordlist.length
+#print "#{num_possible_words} "
+#if num_possible_words == 1
+#	print "word starts"
+#else
+#	print "words start"
+#end
+#puts " with “#{current_letters}”"
 print_truncated_wordlist_with_modified_description( \
  analysis.possible_wordlist, "NUM WORDS start with “#{current_letters}”")
 
