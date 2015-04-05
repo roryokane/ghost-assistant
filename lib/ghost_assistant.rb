@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # environment setup section
 
 NUM_OF_WORDS_TO_SHOW = 10

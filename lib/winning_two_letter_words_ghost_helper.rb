@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require_relative 'wordlist_loader'
 
 wordlist = load_wordlist()

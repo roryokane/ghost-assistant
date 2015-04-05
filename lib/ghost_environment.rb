@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class GhostEnvironment
 	attr_reader :wordlist, :current_letters, :num_of_players
 	# TODO use def_init, initializer, or a customization
