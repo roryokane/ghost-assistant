@@ -6,7 +6,9 @@ class GhostEnvironment
 	def initialize(wordlist, current_letters, num_of_players)
 		@wordlist = wordlist
 		@current_letters = current_letters
-		@num_of_players = [num_of_players.to_i, 2].max
+		@num_of_players = num_of_players.to_i
+		
+		raise "the number of players must be at least 2" if @num_of_players < 2
 	end
 	
 	def env_by_saying_letter(letter)

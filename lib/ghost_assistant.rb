@@ -10,7 +10,7 @@ wordlist = load_wordlist()
 # TODO input validation and defaults
 puts "GHOST word game assistant"
 puts "How many people are playing? (default 2)"
-num_of_players = gets.chomp.to_i
+num_of_players = [gets.chomp.to_i, 2].max
 # num_of_players = 2; puts num_of_players
 puts "What letters have been said so far?"
 current_letters = gets.chomp.strip.downcase
