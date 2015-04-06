@@ -98,10 +98,10 @@ else
 	else
 		print_truncated_wordlist_with_modified_description( \
 		 analysis.good_wordlist, "NUM suitable WORDS found")
-		suggested_response = analysis.suggested_response
-		new_letters = current_letters + suggested_response
-		puts "Suggested letter to say: #{suggested_response.upcase} (forming “#{new_letters}”), with score #{analysis.score(suggested_response)}"
-		next_env = analysis.environment.env_by_saying_letter(suggested_response)
+		response_to_suggest = analysis.random_best_response
+		new_letters = current_letters + response_to_suggest
+		puts "Suggested letter to say: #{response_to_suggest.upcase} (forming “#{new_letters}”), with score #{analysis.score(response_to_suggest)}"
+		next_env = analysis.environment.env_by_saying_letter(response_to_suggest)
 		next_analysis = GhostAnalysis.new(next_env)
 		# TODO show any of the shortest possible words (reject all with more than min length; choose one randomly)
 		legitimate_possible_word = next_analysis.possible_wordlist.first

@@ -73,42 +73,54 @@ class GhostAnalysis
 	
 	# TODO return word instead of letter (beware of affecting #score)
 	# TODO merely calculate and rank words by score, in case people don't know the word
-	def suggested_response
+	def best_responses
 		if possible_wordlist.empty?
-			:challenge
+			[:challenge]
 		elsif good_wordlist.empty?
-			:lose
+			[:lose]
 		elsif good_wordlist.first == @env.current_letters
-			:call
+			[:call]
 		else
-			# if you wanted to choose a letter randomly, weighted by number of good words it leads to:
-			#return good_wordlist.sample[@env.current_letters.length, 1]
-			
-			possible_letters = good_wordlist.map { |word| word[@env.current_letters.length, 1] }.uniq
-			if DEBUG
-				puts "possible letters for “#{@env.current_letters}”: #{possible_letters.join(" ")}"
-			end
-			if possible_letters.length > 1
-				possible_letter_scores = Hash.new
-				possible_letters.each { |letter| possible_letter_scores[letter] = score(letter) }
-				if DEBUG
-					printable_letter_scores = []
-					possible_letter_scores.each { |letter, score| printable_letter_scores << "#{letter}—#{score}" }
-					puts "possible letter scores for “#{@env.current_letters}”: #{printable_letter_scores.join(" ")}"
-				end
-				best_score = possible_letter_scores.values.max
-				if DEBUG
-					puts "best score for “#{@env.current_letters}”: #{best_score}"
-				end
-				best_letters = possible_letter_scores.reject { |letter, score| score != best_score }.keys
-				best_letters.sample
-				# TODO make variant method #best_responses that returns all best letters, instead of a random one,
-				# and lets the caller choose one
-			else
-				possible_letters.first
-			end
+			best_response_letters
 		end
 	end
+	
+	private
+	def best_response_letters
+		possible_letters = possible_response_letters
+		if DEBUG
+			puts "possible letters for “#{@env.current_letters}”: #{possible_letters.join(" ")}"
+		end
+		
+		if possible_letters.length > 1
+			possible_letter_scores = Hash.new
+			possible_letters.each { |letter| possible_letter_scores[letter] = score(letter) }
+			if DEBUG
+				printable_letter_scores = []
+				possible_letter_scores.each { |letter, score| printable_letter_scores << "#{letter}—#{score}" }
+				puts "possible letter scores for “#{@env.current_letters}”: #{printable_letter_scores.join(" ")}"
+			end
+			best_score = possible_letter_scores.values.max
+			if DEBUG
+				puts "best score for “#{@env.current_letters}”: #{best_score}"
+			end
+			best_letters = possible_letter_scores.reject { |letter, score| score != best_score }.keys
+			best_letters
+		else
+			possible_letters
+		end
+	end
+	public
+	
+	def random_best_response
+		best_responses.sample
+	end
+	
+	private
+	def possible_response_letters
+		good_wordlist.map { |word| word[@env.current_letters.length, 1] }.uniq
+	end
+	public
 	
 	def respond_to_loss
 		random_fraction = Kernel::rand
@@ -135,7 +147,7 @@ class GhostAnalysis
 		num_other_players.times do
 			simulated_env = simulated_env.env_by_saying_letter(letter_to_say)
 			analysis = GhostAnalysis.new(simulated_env)
-			next_prediction = analysis.suggested_response
+			next_prediction = analysis.random_best_response
 			if DEBUG
 				puts "predicted response to “#{simulated_env.current_letters}”: #{next_prediction}"
 			end
