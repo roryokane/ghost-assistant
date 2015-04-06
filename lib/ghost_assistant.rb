@@ -14,8 +14,6 @@ puts "What letters have been said so far?"
 current_letters = gets.chomp.strip.downcase
 # current_letters = "lar"; puts current_letters
 # TODO fix bug given input above
-# current_letters = "pemm"; puts current_letters
-# TODO fix bug where score is 1/2 but should be 1 given input above
 
 # TODO optionally, remove a word from the wordlist after it has been used
 # TODO make a computer opponent (as opposed to helper) or group of opponents to play in any game (unnecessary)

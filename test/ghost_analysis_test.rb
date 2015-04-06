@@ -80,6 +80,15 @@ class TestGhostAnalysis < MiniTest::Test
 		end
 	end
 	
+	def test_score_accounts_for_letters_said_on_your_turn
+		env = GhostEnvironment.new(["pemmican", "pemmicans"], "pemm", 2)
+		# In this situation, even though “pemmicans” lands on you, it will never be
+		# reached, because you will have the option to call “it’s a word” before then.
+		# So ‘i’ is perfectly safe to say. So its score should be 1.
+		analysis = GhostAnalysis.new(env)
+		assert_equal 1, analysis.score("i")
+	end
+	
 	private
 	
 	def analysis_suggested_response(current_letters, num_players)
