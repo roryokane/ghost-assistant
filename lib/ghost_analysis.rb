@@ -92,7 +92,9 @@ class GhostAnalysis
 			# return good_wordlist.sample[@env.current_letters.length, 1]
 			
 			possible_letters = good_wordlist.map { |word| word[@env.current_letters.length, 1] }.uniq
-			puts "possible letters for “#{@env.current_letters}”: #{possible_letters.join(" ")}" if DEBUG
+			if DEBUG
+				puts "possible letters for “#{@env.current_letters}”: #{possible_letters.join(" ")}"
+			end
 			if possible_letters.length > 1
 				possible_letter_scores = Hash.new
 				possible_letters.each { |letter| possible_letter_scores[letter] = score(letter) }
@@ -102,10 +104,12 @@ class GhostAnalysis
 					puts "possible letter scores for “#{@env.current_letters}”: #{printable_letter_scores.join(" ")}"
 				end
 				best_score = possible_letter_scores.values.max
-				puts "best score for “#{@env.current_letters}”: #{best_score}" if DEBUG
+				if DEBUG
+					puts "best score for “#{@env.current_letters}”: #{best_score}"
+				end
 				best_letters = possible_letter_scores.reject { |letter, score| score != best_score }.keys
 				best_letters.sample
-				# TODO do I need to do something about #choice using the same random seed each run? (Does #sample do that?)
+				# TODO Do I need to do something about #sample using the same random seed each run? (Does #sample even do that? I think #choice used to.)
 				# TODO make variant method #best_responses that returns all best letters, instead of a random one,
 				# and lets the caller choose one
 			else
@@ -140,7 +144,9 @@ class GhostAnalysis
 			simulated_env = simulated_env.env_by_saying_letter(letter_to_say)
 			analysis = GhostAnalysis.new(simulated_env)
 			next_prediction = analysis.suggested_response
-			puts "predicted response to “#{simulated_env.current_letters}”: #{next_prediction}" if DEBUG
+			if DEBUG
+				puts "predicted response to “#{simulated_env.current_letters}”: #{next_prediction}"
+			end
 			if next_prediction == :lose
 				# cooperate with other players in attacking (assumes other players don’t care who else loses)
 				return 1 # 1/1 score = highest
