@@ -12,8 +12,6 @@ num_of_players = [gets.chomp.to_i, 2].max
 # num_of_players = 2; puts num_of_players
 puts "What letters have been said so far?"
 current_letters = gets.chomp.strip.downcase
-# current_letters = "lar"; puts current_letters
-# TODO fix bug given input above
 
 # TODO optionally, remove a word from the wordlist after it has been used
 # TODO make a computer opponent (as opposed to helper) or group of opponents to play in any game (unnecessary)
@@ -77,7 +75,7 @@ if num_good_words_found == 0
 else
 	
 	if analysis.good_wordlist.first == current_letters
-		puts "“#{current_letters}” is already a word."
+		puts "“#{current_letters}” is already a word. Call the previous player out."
 		analysis.good_wordlist.shift
 		
 		if num_good_words_found == 1
