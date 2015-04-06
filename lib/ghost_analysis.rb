@@ -33,29 +33,26 @@ class GhostAnalysis
 	# this will also allow score() to choose as if someone or everyone else
 	# holds a grudge against you and will always try to get you out
 	def good_wordlist
-		# reject words that would land on the player
-		good_wordlist = possible_wordlist.reject do |word|
-			(word.length - @env.current_letters.length) % @env.num_of_players == 1
-		end
-		
-		# reject words that begin with another word
-		good_wordlist.reject! do |word|
-			found_a_subword = false
-			([@env.current_letters.length+1, MINIMUM_WORD_LENGTH].max .. word.length-1).take_while do |substring_length|
-				substring = word[0, substring_length]
-				substring_is_in_wordlist = possible_wordlist.include?(substring)
-				if substring_is_in_wordlist
-					found_a_subword = true
-					break false
-				end
-			end
-			found_a_subword
-		end
-		
-		good_wordlist
+		possible_wordlist
+			.reject { |word| word_would_land_on_the_player(word) }
+			.reject { |word| word_begins_with_another_word(word) }
 	end
 	
-	# TODO find way to split array into two arrays based on block
+	private
+	def word_would_land_on_the_player(word)
+		((word.length - @env.current_letters.length) % @env.num_of_players) == 1
+	end
+	public
+	
+	private
+	def word_begins_with_another_word(word)
+		minimum_relevant_subword_length = [@env.current_letters.length+1, MINIMUM_WORD_LENGTH].max
+		possible_subword_lengths = minimum_relevant_subword_length..(word.length-1)
+		initial_substrings = possible_subword_lengths.lazy.map { |length| word[0, length] }
+		return initial_substrings.any? { |substring| possible_wordlist.include?(substring) }
+	end
+	public
+	
 	def good_words_kind_to_previous_player
 		categorize_good_words_by_kindness_to_previous_player if ! defined? @good_words_kind_to_previous_player
 		@good_words_kind_to_previous_player
@@ -67,15 +64,10 @@ class GhostAnalysis
 	
 	private
 	def categorize_good_words_by_kindness_to_previous_player
-		@good_words_kind_to_previous_player = []
-		@good_words_that_get_previous_player = []
-		good_wordlist.each do |word|
-			if (word.length - @env.current_letters.length) % @env.num_of_players == 0
-				@good_words_kind_to_previous_player << word
-			else
-				@good_words_that_get_previous_player << word
+		@good_words_kind_to_previous_player, @good_words_that_get_previous_player \
+			= good_wordlist.partition do |word|
+				((word.length - @env.current_letters.length) % @env.num_of_players) == 0
 			end
-		end
 	end
 	public
 	
@@ -89,7 +81,8 @@ class GhostAnalysis
 		elsif good_wordlist.first == @env.current_letters
 			:call
 		else
-			# return good_wordlist.sample[@env.current_letters.length, 1]
+			# if you wanted to choose a letter randomly, weighted by number of good words it leads to:
+			#return good_wordlist.sample[@env.current_letters.length, 1]
 			
 			possible_letters = good_wordlist.map { |word| word[@env.current_letters.length, 1] }.uniq
 			if DEBUG
@@ -109,7 +102,6 @@ class GhostAnalysis
 				end
 				best_letters = possible_letter_scores.reject { |letter, score| score != best_score }.keys
 				best_letters.sample
-				# TODO Do I need to do something about #sample using the same random seed each run? (Does #sample even do that? I think #choice used to.)
 				# TODO make variant method #best_responses that returns all best letters, instead of a random one,
 				# and lets the caller choose one
 			else
@@ -147,6 +139,7 @@ class GhostAnalysis
 			if DEBUG
 				puts "predicted response to “#{simulated_env.current_letters}”: #{next_prediction}"
 			end
+			
 			if next_prediction == :lose
 				# cooperate with other players in attacking (assumes other players don’t care who else loses)
 				return 1 # 1/1 score = highest
