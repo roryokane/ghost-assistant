@@ -1,3 +1,5 @@
+# Ghost Assistant
+
 A program that can perfectly play the word game [GHOST](http://en.wikipedia.org/wiki/Ghost_%28game%29).
 
 Sample run:
@@ -32,3 +34,15 @@ Sample run:
     locutories
     Suggested letter to say: L (forming “lol”), with score 1
     A word starting with “lol”: loll
+
+## Installation
+
+Prerequisites:
+
+* Ruby
+* Bundler (`gem install bundler`)
+
+Installation:
+
+1. download this program, for instance with `git clone https://github.com/roryokane/ghost-assistant.git`
+2. `bundle install`
