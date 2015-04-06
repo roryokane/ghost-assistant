@@ -37,7 +37,7 @@ class TestGhostAnalysis < MiniTest::Test
 		}
 		letters_and_expected_responses_per_num_players.each do |current_letters, responses_per_num_players|
 			responses_per_num_players.each do |num_players, expected_response|
-				assert_equal expected_response, analysis_suggested_response(current_letters, num_players)
+				assert_equal expected_response, analysis_suggested_response(current_letters, num_players), [current_letters, responses_per_num_players].inspect
 			end
 		end
 	end
@@ -59,7 +59,7 @@ class TestGhostAnalysis < MiniTest::Test
 	def test_knows_when_the_player_can_only_lose
 		["censo", "xylograp"].each do |loss_causing_state|
 			NUM_PLAYERS_TEST_RANGE.each do |num_players|
-				assert_equal(:lose, analysis_suggested_response(loss_causing_state, num_players))
+				assert_equal(:lose, analysis_suggested_response(loss_causing_state, num_players), loss_causing_state.inspect)
 			end
 		end
 	end
@@ -67,7 +67,7 @@ class TestGhostAnalysis < MiniTest::Test
 	def test_calls_when_the_current_letters_are_a_word
 		["mar", "qua", "caul", "malign"].each do |word|
 			NUM_PLAYERS_TEST_RANGE.each do |num_players|
-				assert_equal(:call, analysis_suggested_response(word, num_players))
+				assert_equal(:call, analysis_suggested_response(word, num_players), word.inspect)
 			end
 		end
 	end
@@ -75,7 +75,7 @@ class TestGhostAnalysis < MiniTest::Test
 	def test_false_prefixes_cause_challenge
 		["qqq", "bettermnmn", "misssspelling", "notaprefix"].each do |false_prefix|
 			NUM_PLAYERS_TEST_RANGE.each do |num_players|
-				assert_equal(:challenge, analysis_suggested_response(false_prefix, num_players))
+				assert_equal(:challenge, analysis_suggested_response(false_prefix, num_players), false_prefix.inspect)
 			end
 		end
 	end
