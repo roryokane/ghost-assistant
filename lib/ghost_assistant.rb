@@ -50,65 +50,76 @@ def print_truncated_wordlist_with_modified_description(wordlist, description)
 	puts wordlist_subset.join("\n")
 end
 
-#num_possible_words = analysis.possible_wordlist.length
-#print "#{num_possible_words} "
-#if num_possible_words == 1
-#	print "word starts"
-#else
-#	print "words start"
-#end
-#puts " with “#{current_letters}”"
-print_truncated_wordlist_with_modified_description( \
- analysis.possible_wordlist, "NUM WORDS start with “#{current_letters}”")
+def print_words_starting_with_current_letters(current_letters, analysis)
+	#num_possible_words = analysis.possible_wordlist.length
+	#print "#{num_possible_words} "
+	#if num_possible_words == 1
+	#	print "word starts"
+	#else
+	#	print "words start"
+	#end
+	#puts " with “#{current_letters}”"
+	print_truncated_wordlist_with_modified_description( \
+	 analysis.possible_wordlist, "NUM WORDS start with “#{current_letters}”")
+end
+
+def print_words_that_could_get_you_out(analysis)
+	print_truncated_wordlist_with_modified_description( \
+	 analysis.possible_wordlist, "NUM WORDS could get you out")
+end
+
+def print_suitable_words_when_current_letters_are_a_word(analysis, num_good_words_found, num_of_players)
+	analysis.good_wordlist.shift # FIXME mutation of the analysis from outside
+	
+	if num_good_words_found == 1
+		puts "There are no other suitable words."
+	else
+		if num_of_players > 2				
+			if analysis.good_words_kind_to_previous_player.length > 0
+				print_truncated_wordlist_with_modified_description( \
+				 analysis.good_words_kind_to_previous_player, "NUM other suitable WORDS don’t get the previous player out")
+			end
+			if analysis.good_words_that_get_previous_player.length > 0
+				print_truncated_wordlist_with_modified_description( \
+				 analysis.good_words_that_get_previous_player, "NUM other suitable WORDS get the previous player out")
+			end
+		else
+			print_truncated_wordlist_with_modified_description( \
+			 analysis.good_wordlist, "NUM other suitable WORDS")
+		end
+	end
+end
+
+def print_suggestion_when_game_will_continue(current_letters, analysis)
+	print_truncated_wordlist_with_modified_description( \
+	 analysis.good_wordlist, "NUM suitable WORDS found")
+	response_to_suggest = analysis.random_best_response
+	new_letters = current_letters + response_to_suggest
+	puts "Suggested letter to say: #{response_to_suggest.upcase} (forming “#{new_letters}”), with score #{analysis.score(response_to_suggest)}"
+	
+	next_env = analysis.environment.env_by_saying_letter(response_to_suggest)
+	next_analysis = GhostAnalysis.new(next_env)
+	# TODO show any of the shortest possible words (reject all with more than min length; choose one randomly)
+	legitimate_possible_word = next_analysis.possible_wordlist.first
+	puts "A word starting with “#{new_letters}”: #{legitimate_possible_word}"
+	# TODO move word starting with and score into analysis, and check if was only possible letter
+	# TODO for word starting with letters + response, suggest a word that
+	# follows the path of both players doing their best
+end
+
+print_words_starting_with_current_letters(current_letters, analysis)
 
 num_good_words_found = analysis.good_wordlist.length
 if num_good_words_found == 0
-	
 	puts "No suitable words were found."
 	if analysis.possible_wordlist.length > 0
-		print_truncated_wordlist_with_modified_description( \
-		 analysis.possible_wordlist, "NUM WORDS could get you out")
+		print_words_that_could_get_you_out(analysis)
 	else
 		puts "You should challenge."
 	end
-	
+elsif analysis.good_wordlist.first == current_letters
+	puts "“#{current_letters}” is already a word. Call the previous player out."
+	print_suitable_words_when_current_letters_are_a_word(analysis, num_good_words_found, num_of_players)
 else
-	
-	if analysis.good_wordlist.first == current_letters
-		puts "“#{current_letters}” is already a word. Call the previous player out."
-		analysis.good_wordlist.shift # FIXME mutation of the analysis from outside
-		
-		if num_good_words_found == 1
-			puts "There are no other suitable words."
-		else
-			if num_of_players > 2				
-				if analysis.good_words_kind_to_previous_player.length > 0
-					print_truncated_wordlist_with_modified_description( \
-					 analysis.good_words_kind_to_previous_player, "NUM other suitable WORDS don’t get the previous player out")
-				end
-				if analysis.good_words_that_get_previous_player.length > 0
-					print_truncated_wordlist_with_modified_description( \
-					 analysis.good_words_that_get_previous_player, "NUM other suitable WORDS get the previous player out")
-				end
-			else
-				print_truncated_wordlist_with_modified_description( \
-				 analysis.good_wordlist, "NUM other suitable WORDS")
-			end
-		end
-	else
-		print_truncated_wordlist_with_modified_description( \
-		 analysis.good_wordlist, "NUM suitable WORDS found")
-		response_to_suggest = analysis.random_best_response
-		new_letters = current_letters + response_to_suggest
-		puts "Suggested letter to say: #{response_to_suggest.upcase} (forming “#{new_letters}”), with score #{analysis.score(response_to_suggest)}"
-		next_env = analysis.environment.env_by_saying_letter(response_to_suggest)
-		next_analysis = GhostAnalysis.new(next_env)
-		# TODO show any of the shortest possible words (reject all with more than min length; choose one randomly)
-		legitimate_possible_word = next_analysis.possible_wordlist.first
-		puts "A word starting with “#{new_letters}”: #{legitimate_possible_word}"
-		# TODO move word starting with and score into analysis, and check if was only possible letter
-		# TODO for word starting with letters + response, suggest a word that
-		# follows the path of both players doing their best
-	end
-	
+	print_suggestion_when_game_will_continue(current_letters, analysis)
 end
