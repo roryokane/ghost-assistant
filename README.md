@@ -35,6 +35,10 @@ Sample run:
     Suggested letter to say: L (forming “lol”), with score 1
     A word starting with “lol”: loll
 
+## Status
+
+This program doesn’t actually play perfectly yet – I know that its heuristics can be improved. But it’s still good enough to have beaten every human I have ever tried it against.
+
 ## Installation
 
 Prerequisites:
