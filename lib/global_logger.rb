@@ -1,4 +1,4 @@
 require 'logger'
 
-$logger = Logger.new(STDOUT)
-$logger.level = Logger::WARN
+LOGGER = Logger.new(STDOUT)
+LOGGER.level = Logger::WARN
