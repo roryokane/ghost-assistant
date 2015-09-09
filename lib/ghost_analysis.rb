@@ -23,8 +23,8 @@ class GhostAnalysis
 	end
 	
 	def possible_wordlist
-		@env.wordlist.reject do |word|
-			! word.start_with?(@env.current_letters) || word.length < MINIMUM_WORD_LENGTH
+		@env.wordlist.select do |word|
+			word.start_with?(@env.current_letters) && word.length >= MINIMUM_WORD_LENGTH
 		end
 	end
 	
@@ -101,7 +101,7 @@ class GhostAnalysis
 			end
 			best_score = possible_letter_scores.values.max
 			$logger.debug { "best score for “#{@env.current_letters}”: #{best_score}" }
-			best_letters = possible_letter_scores.reject { |letter, score| score != best_score }.keys
+			best_letters = possible_letter_scores.select { |letter, score| score == best_score }.keys
 			best_letters
 		else
 			possible_letters
