@@ -1,7 +1,7 @@
 require 'memoist'
+require_relative 'global_logger'
 
 MINIMUM_WORD_LENGTH = 3
-DEBUG = false
 
 class GhostAnalysis
 	include Memoist
@@ -88,22 +88,19 @@ class GhostAnalysis
 	private
 	def best_response_letters
 		possible_letters = possible_response_letters
-		if DEBUG
-			puts "possible letters for “#{@env.current_letters}”: #{possible_letters.join(" ")}"
-		end
+		$logger.debug { "possible letters for “#{@env.current_letters}”: #{possible_letters.join(" ")}" }
 		
 		if possible_letters.length > 1
 			possible_letter_scores = Hash.new
 			possible_letters.each { |letter| possible_letter_scores[letter] = score(letter) }
-			if DEBUG
-				printable_letter_scores = []
-				possible_letter_scores.each { |letter, score| printable_letter_scores << "#{letter}—#{score}" }
-				puts "possible letter scores for “#{@env.current_letters}”: #{printable_letter_scores.join(" ")}"
+			$logger.debug do
+				printable_letter_scores = possible_letter_scores.map do |letter, score|
+					"#{letter}—#{score}"
+				end
+				"possible letter scores for “#{@env.current_letters}”: #{printable_letter_scores.join(" ")}"
 			end
 			best_score = possible_letter_scores.values.max
-			if DEBUG
-				puts "best score for “#{@env.current_letters}”: #{best_score}"
-			end
+			$logger.debug { "best score for “#{@env.current_letters}”: #{best_score}" }
 			best_letters = possible_letter_scores.reject { |letter, score| score != best_score }.keys
 			best_letters
 		else
@@ -148,9 +145,7 @@ class GhostAnalysis
 			simulated_env = simulated_env.env_by_saying_letter(letter_to_say)
 			analysis = GhostAnalysis.new(simulated_env)
 			next_prediction = analysis.random_best_response
-			if DEBUG
-				puts "predicted response to “#{simulated_env.current_letters}”: #{next_prediction}"
-			end
+			$logger.debug { "predicted response to “#{simulated_env.current_letters}”: #{next_prediction}" }
 			
 			if next_prediction == :lose
 				# cooperate with other players in attacking (assumes other players don’t care who else loses)
