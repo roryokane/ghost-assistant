@@ -89,12 +89,9 @@ class TestGhostAnalysis < MiniTest::Test
 	end
 	
 	def assert_best_responses_for_all_nums_players_are_always(current_letter_inputs, expected)
-		current_letter_inputs.each do |current_letters|
-			NUM_PLAYERS_TEST_RANGE.each do |num_players|
-				args = [current_letters, num_players]
-				actual = analysis_best_responses(*args)
-				assert_equal_given_input(expected, actual, args)
-			end
+		test_cases = current_letter_inputs.product(NUM_PLAYERS_TEST_RANGE.to_a)
+		assert_all_have_result_after_processing(test_cases, expected) do |current_letters, num_players|
+			analysis_best_responses(current_letters, num_players)
 		end
 	end
 		end
