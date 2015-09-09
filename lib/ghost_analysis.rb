@@ -33,8 +33,8 @@ class GhostAnalysis
 	# this will also allow score() to choose as if someone or everyone else
 	# holds a grudge against you and will always try to get you out
 	def good_wordlist
-		possible_wordlist
-			.reject { |word| word_would_land_on_the_player(word) }
+		possible_wordlist \
+			.reject { |word| word_would_land_on_the_player(word) } \
 			.reject { |word| word_begins_with_another_word(word) }
 	end
 	
