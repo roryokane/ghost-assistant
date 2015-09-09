@@ -37,6 +37,8 @@ Sample run:
 
 ## Status
 
+[![Project Status: Inactive – The project has reached a stable, usable state but is not being actively developed right now; support/maintenance will be provided as time allows.](http://www.repostatus.org/badges/0.1.0/inactive.svg)](http://www.repostatus.org/#inactive)
+
 This program doesn’t actually play perfectly yet – I know that its heuristics can be improved. But it’s still good enough to have beaten every human I have ever tried it against.
 
 ## Installation
