@@ -94,6 +94,4 @@ class TestGhostAnalysis < MiniTest::Test
 			analysis_best_responses(current_letters, num_players)
 		end
 	end
-		end
-	end
 end
