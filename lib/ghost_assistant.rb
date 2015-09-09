@@ -76,7 +76,7 @@ else
 	
 	if analysis.good_wordlist.first == current_letters
 		puts "“#{current_letters}” is already a word. Call the previous player out."
-		analysis.good_wordlist.shift
+		analysis.good_wordlist.shift # FIXME mutation of the analysis from outside
 		
 		if num_good_words_found == 1
 			puts "There are no other suitable words."
