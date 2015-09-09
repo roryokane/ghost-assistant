@@ -43,36 +43,31 @@ class TestGhostAnalysis < MiniTest::Test
 			"qa" => {2=>["i"], 3=>["i", "n"], 4=>["i", "n"]},
 			"marbli" => {2=>["n"], 3=>["e","n"], 4=>["e","n"]},
 		}
-		letters_and_expected_responses_per_num_players.each do |current_letters, responses_per_num_players|
-			responses_per_num_players.each do |num_players, expected_response|
-				assert_equal expected_response, analysis_best_responses(current_letters, num_players), \
-					[current_letters, responses_per_num_players].inspect
+		
+		inputs_and_expected_responses = letters_and_expected_responses_per_num_players.flat_map do |current_letters, responses_per_num_players|
+			responses_per_num_players.map do |num_players, expected_response|
+				{[current_letters, num_players] => expected_response}
 			end
+		end.reduce(:merge)
+		
+		assert_each_has_result_after_processing(inputs_and_expected_responses) do |current_letters, num_players|
+			analysis_best_responses(current_letters, num_players)
 		end
 	end
 	
 	def test_knows_when_the_player_can_only_lose
-		["censo", "xylograp"].each do |loss_causing_state|
-			NUM_PLAYERS_TEST_RANGE.each do |num_players|
-				assert_equal([:lose], analysis_best_responses(loss_causing_state, num_players), loss_causing_state.inspect)
-			end
-		end
+		loss_causing_states = ["censo", "xylograp"]
+		assert_best_responses_for_all_nums_players_are_always(loss_causing_states, [:lose])
 	end
 	
 	def test_calls_when_the_current_letters_are_a_word
-		["mar", "qua", "caul", "malign"].each do |word|
-			NUM_PLAYERS_TEST_RANGE.each do |num_players|
-				assert_equal([:call], analysis_best_responses(word, num_players), word.inspect)
-			end
-		end
+		words = ["mar", "qua", "caul", "malign"]
+		assert_best_responses_for_all_nums_players_are_always(words, [:call])
 	end
 	
 	def test_false_prefixes_cause_challenge
-		["qqq", "bettermnmn", "misssspelling", "notaprefix"].each do |false_prefix|
-			NUM_PLAYERS_TEST_RANGE.each do |num_players|
-				assert_equal([:challenge], analysis_best_responses(false_prefix, num_players), false_prefix.inspect)
-			end
-		end
+		false_prefixes = ["qqq", "bettermnmn", "misssspelling", "notaprefix"]
+		assert_best_responses_for_all_nums_players_are_always(false_prefixes, [:challenge])
 	end
 	
 	def test_score_accounts_for_letters_said_on_your_turn
@@ -91,5 +86,17 @@ class TestGhostAnalysis < MiniTest::Test
 		env = GhostEnvironment.new(@wordlist, current_letters, num_players)
 		analysis = GhostAnalysis.new(env)
 		return analysis.best_responses
+	end
+	
+	def assert_best_responses_for_all_nums_players_are_always(current_letter_inputs, expected)
+		current_letter_inputs.each do |current_letters|
+			NUM_PLAYERS_TEST_RANGE.each do |num_players|
+				args = [current_letters, num_players]
+				actual = analysis_best_responses(*args)
+				assert_equal_given_input(expected, actual, args)
+			end
+		end
+	end
+		end
 	end
 end
